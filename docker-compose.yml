@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:${POSTGRES_VERSION}
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    env_file:
+      - .env
+    networks:
+      - odoo_dev
+
+  odoo:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile${ODOO_VERSION}
+    volumes:
+      - ./addons:/mnt/addons
+      - ./odoo:/mnt/odoo
+      - ./odoo_web_data:/var/lib/odoo
+      - ./conf/:/etc/odoo/
+    environment:
+      PGHOST: db
+    env_file:
+      - .env
+    ports:
+      - "8069:8069"
+      - "8071:8071"
+      - "8072:8072"
+    depends_on:
+      - db
+    networks:
+      - odoo_dev
+
+networks:
+  odoo_dev:
+    external:
+      name: odoo_dev
