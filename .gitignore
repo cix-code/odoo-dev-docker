@@ -127,3 +127,10 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+
+odoo/
+addons/
+odoo_web_data/
+data/
+conf/*.conf
